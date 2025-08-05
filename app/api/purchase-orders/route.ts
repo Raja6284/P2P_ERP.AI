@@ -37,41 +37,51 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { requisitionId, vendorName, vendorEmail, expectedDeliveryDate, notes } = body;
+    const { requisitionIds, vendorName, vendorEmail, expectedDeliveryDate, notes } = body;
 
-    if (!requisitionId || !vendorName) {
-      return NextResponse.json({ error: 'Requisition ID and vendor name are required' }, { status: 400 });
+    if (!requisitionIds || !Array.isArray(requisitionIds) || requisitionIds.length === 0 || !vendorName) {
+      return NextResponse.json({ error: 'Requisition IDs and vendor name are required' }, { status: 400 });
     }
 
     await connectToDatabase();
 
-    // Verify requisition exists and is approved
-    const requisition = await Requisition.findById(requisitionId);
-    if (!requisition) {
-      return NextResponse.json({ error: 'Requisition not found' }, { status: 404 });
+    // Verify all requisitions exist and are approved
+    const requisitions = await Requisition.find({ 
+      _id: { $in: requisitionIds },
+      status: 'approved'
+    });
+    
+    if (requisitions.length !== requisitionIds.length) {
+      return NextResponse.json({ error: 'Some requisitions not found or not approved' }, { status: 400 });
     }
 
-    if (requisition.status !== 'approved') {
-      return NextResponse.json({ error: 'Requisition must be approved' }, { status: 400 });
-    }
-
-    // Convert requisition items to PO items
-    const items = requisition.items.map((item: any) => ({
-      itemName: item.itemName,
-      description: item.description,
-      quantity: item.quantity,
-      unitPrice: item.estimatedPrice,
-      totalPrice: item.totalPrice,
-    }));
+    // Combine all items from selected requisitions
+    const items: any[] = [];
+    let totalAmount = 0;
+    
+    requisitions.forEach(requisition => {
+      requisition.items.forEach((item: any) => {
+        items.push({
+          itemName: item.itemName,
+          description: item.description,
+          quantity: item.quantity,
+          unitPrice: item.estimatedPrice,
+          totalPrice: item.totalPrice,
+          requisitionId: requisition._id,
+          requisitionNumber: requisition.requisitionNumber,
+        });
+      });
+      totalAmount += requisition.totalAmount;
+    });
 
     const purchaseOrder = new PurchaseOrder({
       poNumber: generatePONumber(),
-      requisitionId: requisition._id,
-      requisitionNumber: requisition.requisitionNumber,
+      requisitionIds: requisitionIds,
+      requisitionNumbers: requisitions.map(r => r.requisitionNumber),
       vendorName,
       vendorEmail,
       items,
-      totalAmount: requisition.totalAmount,
+      totalAmount,
       createdBy: session.user.name,
       expectedDeliveryDate: expectedDeliveryDate ? new Date(expectedDeliveryDate) : undefined,
       notes,

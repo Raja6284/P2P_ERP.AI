@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { suggestItemsFromDescription } from '@/lib/utils/openai';
+import { suggestItemsFromDescription } from '@/lib/utils/gemini';
 
 export async function POST(request: NextRequest) {
   try {

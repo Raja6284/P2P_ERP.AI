@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 export interface IPurchaseOrder {
   _id?: string;
   poNumber: string;
-  requisitionId: string;
-  requisitionNumber: string;
+  requisitionIds: string[];
+  requisitionNumbers: string[];
   vendorName: string;
   vendorEmail?: string;
   items: Array<{
@@ -13,9 +13,11 @@ export interface IPurchaseOrder {
     quantity: number;
     unitPrice: number;
     totalPrice: number;
+    requisitionId?: string;
+    requisitionNumber?: string;
   }>;
   totalAmount: number;
-  status: 'created' | 'processing' | 'completed';
+  status: 'pending' | 'in-transit' | 'received' | 'completed';
   createdBy: string;
   expectedDeliveryDate?: Date;
   actualDeliveryDate?: Date;
@@ -26,8 +28,8 @@ export interface IPurchaseOrder {
 
 const PurchaseOrderSchema = new mongoose.Schema<IPurchaseOrder>({
   poNumber: { type: String, required: true, unique: true },
-  requisitionId: { type: String, required: true },
-  requisitionNumber: { type: String, required: true },
+  requisitionIds: [{ type: String, required: true }],
+  requisitionNumbers: [{ type: String, required: true }],
   vendorName: { type: String, required: true },
   vendorEmail: { type: String },
   items: [{
@@ -36,12 +38,14 @@ const PurchaseOrderSchema = new mongoose.Schema<IPurchaseOrder>({
     quantity: { type: Number, required: true, min: 1 },
     unitPrice: { type: Number, required: true, min: 0 },
     totalPrice: { type: Number, required: true, min: 0 },
+    requisitionId: { type: String },
+    requisitionNumber: { type: String },
   }],
   totalAmount: { type: Number, required: true, min: 0 },
   status: { 
     type: String, 
-    enum: ['created', 'processing', 'completed'],
-    default: 'created'
+    enum: ['pending', 'in-transit', 'received', 'completed'],
+    default: 'pending'
   },
   createdBy: { type: String, required: true },
   expectedDeliveryDate: { type: Date },

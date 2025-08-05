@@ -19,7 +19,7 @@ export default function ChatAssistant() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'Hello! I\'m your ERP assistant. I can help you with requisitions, purchase orders, invoices, and general system questions. How can I assist you today?',
+      content: 'Hello! I\'m your AI-powered ERP assistant using Gemini AI. I can help you with:\n\n• Requisitions and approvals\n• Purchase orders and tracking\n• Invoice processing and payments\n• System data queries\n• Workflow questions\n\nTry asking me things like "Show me pending invoices" or "How many POs were created this week?"',
       role: 'assistant',
       timestamp: new Date(),
     },

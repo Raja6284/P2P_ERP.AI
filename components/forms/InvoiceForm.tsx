@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Upload, FileText, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { extractTextFromImage } from '@/lib/utils/ocr';
+// OCR functionality moved to the new invoice upload page
 
 const invoiceSchema = z.object({
   invoiceNumber: z.string().min(1, 'Invoice number is required'),

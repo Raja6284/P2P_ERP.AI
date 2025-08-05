@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { getChatCompletion } from '@/lib/utils/openai';
+import { getChatCompletion, querySystemData } from '@/lib/utils/gemini';
+import connectToDatabase from '@/lib/mongodb';
+import Requisition from '@/models/Requisition';
+import PurchaseOrder from '@/models/PurchaseOrder';
+import Invoice from '@/models/Invoice';
+import Payment from '@/models/Payment';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,19 +22,50 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    const systemPrompt = `You are a helpful ERP system assistant. You help users with:
-    - Creating requisitions
-    - Understanding the procurement process
-    - Purchase order management
-    - Invoice and payment processes
-    - General ERP workflow questions
-    
-    Keep responses concise and professional. If asked about specific data, remind users to check the relevant sections in the system.`;
-
-    const response = await getChatCompletion([
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: message }
+    // Get system data for context
+    await connectToDatabase();
+    const [requisitions, purchaseOrders, invoices, payments] = await Promise.all([
+      Requisition.find({}).limit(50),
+      PurchaseOrder.find({}).limit(50),
+      Invoice.find({}).limit(50),
+      Payment.find({}).limit(50)
     ]);
+
+    const systemData = {
+      requisitions: requisitions.map(r => ({
+        id: r._id,
+        number: r.requisitionNumber,
+        status: r.status,
+        amount: r.totalAmount,
+        requester: r.requesterName,
+        department: r.department,
+        createdAt: r.createdAt
+      })),
+      purchaseOrders: purchaseOrders.map(po => ({
+        id: po._id,
+        number: po.poNumber,
+        status: po.status,
+        amount: po.totalAmount,
+        vendor: po.vendorName,
+        createdAt: po.createdAt
+      })),
+      invoices: invoices.map(inv => ({
+        id: inv._id,
+        number: inv.invoiceNumber,
+        status: inv.status,
+        amount: inv.amount,
+        vendor: inv.vendorName,
+        createdAt: inv.createdAt
+      })),
+      payments: payments.map(p => ({
+        id: p._id,
+        number: p.paymentNumber,
+        amount: p.amount,
+        status: p.status,
+        createdAt: p.createdAt
+      }))
+    };
+    const response = await querySystemData(message, systemData);
 
     return NextResponse.json({ response });
   } catch (error) {

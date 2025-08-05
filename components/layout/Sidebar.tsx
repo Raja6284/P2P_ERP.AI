@@ -19,9 +19,10 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, roles: ['requester', 'manager', 'store', 'finance', 'admin'] },
   { name: 'Requisitions', href: '/requisitions', icon: FileText, roles: ['requester', 'manager', 'admin'] },
   { name: 'Purchase Orders', href: '/purchase-orders', icon: ShoppingCart, roles: ['manager', 'store', 'admin'] },
-  { name: 'Invoices', href: '/invoices', icon: Receipt, roles: ['finance', 'admin'] },
-  { name: 'Payments', href: '/payments', icon: CreditCard, roles: ['finance', 'admin'] },
-  { name: 'Users', href: '/users', icon: Users, roles: ['admin'] },
+  { name: 'Store Management', href: '/store/purchase-orders', icon: ShoppingCart, roles: ['store', 'admin'] },
+  { name: 'Invoices', href: '/finance/invoices', icon: Receipt, roles: ['finance', 'admin'] },
+  { name: 'Payments', href: '/finance/payments', icon: CreditCard, roles: ['finance', 'admin'] },
+  { name: 'User Management', href: '/admin/users', icon: Users, roles: ['admin'] },
   { name: 'AI Assistant', href: '/ai-assistant', icon: MessageCircle, roles: ['requester', 'manager', 'store', 'finance', 'admin'] },
 ];
 
