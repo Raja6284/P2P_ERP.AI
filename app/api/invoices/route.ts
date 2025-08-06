@@ -3,6 +3,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import connectToDatabase from '@/lib/mongodb';
 import Invoice from '@/models/Invoice';
+import PurchaseOrder from '@/models/PurchaseOrder';
+import { validateInvoiceAgainstPO } from '@/lib/utils/gemini';
 
 export async function GET(request: NextRequest) {
   try {
@@ -43,17 +45,32 @@ export async function POST(request: NextRequest) {
 
     await connectToDatabase();
 
+    // Validate invoice against existing POs and detect anomalies
+    const purchaseOrders = await PurchaseOrder.find({ 
+      vendorName: { $regex: vendorName, $options: 'i' },
+      status: { $in: ['pending', 'in-transit', 'received'] }
+    });
+    
+    const validation = await validateInvoiceAgainstPO({
+      invoiceNumber, vendorName, amount, invoiceDate
+    }, purchaseOrders);
+
+    const matchedPO = validation.matchedPO;
+    const anomalies = validation.anomalies;
+
     const invoice = new Invoice({
       invoiceNumber,
       vendorName,
       amount: parseFloat(amount),
       invoiceDate: new Date(invoiceDate),
       dueDate: new Date(dueDate),
-      poId,
-      poNumber,
+      poId: matchedPO?._id || poId,
+      poNumber: matchedPO?.poNumber || poNumber,
       uploadedBy: session.user.name,
       ocrExtracted: ocrExtracted || false,
       extractedData,
+      anomalies: anomalies.length > 0 ? anomalies : undefined,
+      matchedPO: !!matchedPO,
       notes,
     });
 

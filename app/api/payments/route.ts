@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     await payment.save();
 
     // Update invoice status to paid
-    await Invoice.findByIdAndUpdate(invoiceId, { status: 'paid' });
+    await Invoice.findByIdAndUpdate(invoiceId, { status: 'paid' }, { new: true });
 
     return NextResponse.json(payment, { status: 201 });
   } catch (error) {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +18,7 @@ interface Message {
 export default function ChatAssistant() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
+      id: 'welcome',
       content: 'Hello! I\'m your AI-powered ERP assistant using Gemini AI. I can help you with:\n\n• Requisitions and approvals\n• Purchase orders and tracking\n• Invoice processing and payments\n• System data queries\n• Workflow questions\n\nTry asking me things like "Show me pending invoices" or "How many POs were created this week?"',
       role: 'assistant',
       timestamp: new Date(),
@@ -28,15 +28,15 @@ export default function ChatAssistant() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const sendMessage = async () => {
+  const sendMessage = useCallback(async () => {
     if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
@@ -50,6 +50,15 @@ export default function ChatAssistant() {
     setInput('');
     setIsLoading(true);
 
+    // Add typing indicator
+    const typingMessage: Message = {
+      id: 'typing',
+      content: '...',
+      role: 'assistant',
+      timestamp: new Date(),
+    };
+    setMessages(prev => [...prev, typingMessage]);
+
     try {
       const response = await fetch('/api/ai/chat', {
         method: 'POST',
@@ -59,6 +68,10 @@ export default function ChatAssistant() {
 
       if (response.ok) {
         const data = await response.json();
+        
+        // Remove typing indicator and add real response
+        setMessages(prev => prev.filter(m => m.id !== 'typing'));
+        
         const assistantMessage: Message = {
           id: (Date.now() + 1).toString(),
           content: data.response,
@@ -67,24 +80,26 @@ export default function ChatAssistant() {
         };
         setMessages(prev => [...prev, assistantMessage]);
       } else {
+        setMessages(prev => prev.filter(m => m.id !== 'typing'));
         toast.error('Failed to get AI response');
       }
     } catch (error) {
+      setMessages(prev => prev.filter(m => m.id !== 'typing'));
       toast.error('An error occurred while sending the message');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [input, isLoading]);
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
-  };
+  }, [sendMessage]);
 
   return (
-    <Card className="w-full max-w-2xl mx-auto h-[600px] flex flex-col">
+    <Card className="w-full max-w-4xl mx-auto h-[70vh] min-h-[500px] flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Bot className="h-5 w-5" />
@@ -92,7 +107,7 @@ export default function ChatAssistant() {
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">
-        <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+        <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2">
           {messages.map((message) => (
             <div
               key={message.id}
@@ -101,23 +116,41 @@ export default function ChatAssistant() {
               }`}
             >
               {message.role === 'assistant' && (
-                <Avatar className="h-8 w-8">
+                <Avatar className="h-8 w-8 flex-shrink-0">
                   <AvatarFallback className="bg-blue-100 text-blue-600">
-                    <Bot className="h-4 w-4" />
+                    {message.id === 'typing' ? (
+                      <div className="flex space-x-1">
+                        <div className="w-1 h-1 bg-blue-600 rounded-full animate-bounce"></div>
+                        <div className="w-1 h-1 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-1 h-1 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      </div>
+                    ) : (
+                      <Bot className="h-4 w-4" />
+                    )}
                   </AvatarFallback>
                 </Avatar>
               )}
               <div
-                className={`max-w-[80%] p-3 rounded-lg ${
+                className={`max-w-[85%] p-3 rounded-lg break-words ${
                   message.role === 'user'
                     ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-900'
+                    : message.id === 'typing' 
+                      ? 'bg-gray-100 text-gray-500'
+                      : 'bg-gray-100 text-gray-900'
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                <p className="text-xs mt-1 opacity-70">
-                  {message.timestamp.toLocaleTimeString()}
-                </p>
+                {message.id === 'typing' ? (
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm">AI is thinking</span>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                    <p className="text-xs mt-2 opacity-70">
+                      {message.timestamp.toLocaleTimeString()}
+                    </p>
+                  </>
+                )}
               </div>
               {message.role === 'user' && (
                 <Avatar className="h-8 w-8">
@@ -128,32 +161,24 @@ export default function ChatAssistant() {
               )}
             </div>
           ))}
-          {isLoading && (
-            <div className="flex items-start gap-3">
-              <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-blue-100 text-blue-600">
-                  <Bot className="h-4 w-4" />
-                </AvatarFallback>
-              </Avatar>
-              <div className="bg-gray-100 p-3 rounded-lg">
-                <Loader2 className="h-4 w-4 animate-spin" />
-              </div>
-            </div>
-          )}
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 pt-2 border-t">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask me anything about the ERP system..."
+            placeholder="Ask me anything about the ERP system... (Press Enter to send)"
             disabled={isLoading}
-            className="flex-1"
+            className="flex-1 resize-none"
           />
           <Button onClick={sendMessage} disabled={isLoading || !input.trim()}>
-            <Send className="h-4 w-4" />
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </CardContent>

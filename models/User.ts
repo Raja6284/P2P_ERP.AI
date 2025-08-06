@@ -59,6 +59,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: 'requester',
   },
+  isActive: { type: Boolean, default: true },
 }, {
   timestamps: true,
 });

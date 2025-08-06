@@ -168,10 +168,12 @@ export default function PurchaseOrdersPage() {
                   </div>
 
                   <div className="mt-4 flex justify-end space-x-2">
-                    <Button variant="outline" size="sm">
+                    <Link href={`/purchase-orders/${po._id}`}>
+                      <Button variant="outline" size="sm">
                       <Eye className="mr-2 h-4 w-4" />
                       View Details
-                    </Button>
+                      </Button>
+                    </Link>
                     {userRole === 'store' && po.status !== 'completed' && (
                       <Link href={`/store/purchase-orders/${po._id}`}>
                         <Button size="sm">Update Status</Button>

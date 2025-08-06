@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { getChatCompletion, querySystemData } from '@/lib/utils/gemini';
+import { querySystemData } from '@/lib/utils/gemini';
 import connectToDatabase from '@/lib/mongodb';
 import Requisition from '@/models/Requisition';
 import PurchaseOrder from '@/models/PurchaseOrder';
@@ -18,18 +18,27 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { message } = body;
 
+    if (!process.env.GEMINI_API_KEY) {
+      return NextResponse.json({ 
+        response: 'AI assistant is currently unavailable. Please check the Gemini API configuration.' 
+      });
+    }
+
     if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
     // Get system data for context
     await connectToDatabase();
+    
     const [requisitions, purchaseOrders, invoices, payments] = await Promise.all([
       Requisition.find({}).limit(50),
       PurchaseOrder.find({}).limit(50),
       Invoice.find({}).limit(50),
       Payment.find({}).limit(50)
     ]);
+
+    const userRole = (session.user as any)?.role;
 
     const systemData = {
       requisitions: requisitions.map(r => ({
@@ -39,6 +48,7 @@ export async function POST(request: NextRequest) {
         amount: r.totalAmount,
         requester: r.requesterName,
         department: r.department,
+        items: r.items?.length || 0,
         createdAt: r.createdAt
       })),
       purchaseOrders: purchaseOrders.map(po => ({
@@ -47,6 +57,7 @@ export async function POST(request: NextRequest) {
         status: po.status,
         amount: po.totalAmount,
         vendor: po.vendorName,
+        items: po.items?.length || 0,
         createdAt: po.createdAt
       })),
       invoices: invoices.map(inv => ({
@@ -55,6 +66,8 @@ export async function POST(request: NextRequest) {
         status: inv.status,
         amount: inv.amount,
         vendor: inv.vendorName,
+        dueDate: inv.dueDate,
+        overdue: new Date(inv.dueDate) < new Date() && inv.status !== 'paid',
         createdAt: inv.createdAt
       })),
       payments: payments.map(p => ({
@@ -62,14 +75,20 @@ export async function POST(request: NextRequest) {
         number: p.paymentNumber,
         amount: p.amount,
         status: p.status,
+        method: p.paymentMethod,
         createdAt: p.createdAt
-      }))
+      })),
+      userRole,
+      currentDate: new Date().toISOString()
     };
+    
     const response = await querySystemData(message, systemData);
 
     return NextResponse.json({ response });
   } catch (error) {
     console.error('AI Chat Error:', error);
-    return NextResponse.json({ error: 'Failed to get AI response' }, { status: 500 });
+    return NextResponse.json({ 
+      response: 'I apologize, but I encountered an error processing your request. Please try again or contact support if the issue persists.' 
+    });
   }
 }

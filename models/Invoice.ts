@@ -13,6 +13,8 @@ export interface IInvoice {
   uploadedBy: string;
   filePath?: string;
   ocrExtracted: boolean;
+  anomalies?: string[];
+  matchedPO?: boolean;
   extractedData?: {
     confidence: number;
     rawText: string;
@@ -38,6 +40,8 @@ const InvoiceSchema = new mongoose.Schema<IInvoice>({
   uploadedBy: { type: String, required: true },
   filePath: { type: String },
   ocrExtracted: { type: Boolean, default: false },
+  anomalies: [{ type: String }],
+  matchedPO: { type: Boolean },
   extractedData: {
     confidence: { type: Number },
     rawText: { type: String },

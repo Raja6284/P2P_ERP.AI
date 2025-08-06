@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI , {
@@ -15,6 +16,7 @@ const UserSchema = new mongoose.Schema({
   role: String,
   department: String,
   isActive: { type: Boolean, default: true },
+  isActive: { type: Boolean, default: true },
 }, { timestamps: true });
 
 const User = mongoose.model('User', UserSchema);
@@ -29,37 +31,42 @@ async function seedUsers() {
       {
         name: 'Admin User',
         email: 'admin@demo.com',
-        password: await bcrypt.hash('admin123', 12),
+        password: await bcrypt.hash('password123', 12),
         role: 'admin',
         department: 'IT',
+        isActive: true,
       },
       {
         name: 'Manager User',
         email: 'manager@demo.com',
-        password: await bcrypt.hash('manager123', 12),
+        password: await bcrypt.hash('password123', 12),
         role: 'manager',
         department: 'Operations',
+        isActive: true,
       },
       {
         name: 'Finance User',
         email: 'finance@demo.com',
-        password: await bcrypt.hash('finance123', 12),
+        password: await bcrypt.hash('password123', 12),
         role: 'finance',
         department: 'Finance',
+        isActive: true,
       },
       {
         name: 'Store User',
         email: 'store@demo.com',
-        password: await bcrypt.hash('store123', 12),
+        password: await bcrypt.hash('password123', 12),
         role: 'store',
         department: 'Procurement',
+        isActive: true,
       },
       {
         name: 'Requester User',
         email: 'requester@demo.com',
-        password: await bcrypt.hash('requester123', 12),
+        password: await bcrypt.hash('password123', 12),
         role: 'requester',
         department: 'Marketing',
+        isActive: true,
       },
     ];
 
@@ -67,7 +74,7 @@ async function seedUsers() {
     console.log('✅ Demo users created successfully!');
     console.log('Login credentials:');
     users.forEach(user => {
-      console.log(`${user.role}: ${user.email} / ${user.email.split('@')[0]}123`);
+      console.log(`${user.role}: ${user.email} / password123`);
     });
 
   } catch (error) {

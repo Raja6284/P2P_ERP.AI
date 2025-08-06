@@ -170,10 +170,12 @@ export default function RequisitionsPage() {
                   </div>
 
                   <div className="mt-4 flex justify-end space-x-2">
-                    <Button variant="outline" size="sm">
+                    <Link href={`/requisitions/${requisition._id}`}>
+                      <Button variant="outline" size="sm">
                       <Eye className="mr-2 h-4 w-4" />
                       View Details
-                    </Button>
+                      </Button>
+                    </Link>
                     
                     {userRole === 'manager' && requisition.status === 'pending' && (
                       <>

@@ -197,10 +197,12 @@ export default function FinancePaymentsPage() {
                   </div>
 
                   <div className="mt-4 flex justify-end">
-                    <Button variant="outline" size="sm">
+                    <Link href={`/payments/${payment._id}`}>
+                      <Button variant="outline" size="sm">
                       <Eye className="mr-2 h-4 w-4" />
                       View Details
-                    </Button>
+                      </Button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>

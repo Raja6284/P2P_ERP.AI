@@ -203,10 +203,12 @@ export default function FinanceInvoicesPage() {
                   </div>
 
                   <div className="mt-4 flex justify-end space-x-2">
-                    <Button variant="outline" size="sm">
+                    <Link href={`/invoices/${invoice._id}`}>
+                      <Button variant="outline" size="sm">
                       <Eye className="mr-2 h-4 w-4" />
                       View Details
-                    </Button>
+                      </Button>
+                    </Link>
                     {invoice.status === 'approved' && (
                       <Link href={`/finance/payments/new?invoiceId=${invoice._id}`}>
                         <Button size="sm">Record Payment</Button>
