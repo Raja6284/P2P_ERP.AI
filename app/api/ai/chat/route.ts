@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { message } = body;
 
-    if (!process.env.GEMINI_API_KEY) {
+    if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
       return NextResponse.json({ 
         response: 'AI assistant is currently unavailable. Please check the Gemini API configuration.' 
       });

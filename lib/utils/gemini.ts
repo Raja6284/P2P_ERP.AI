@@ -4,7 +4,7 @@ const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY || '
 
 export async function getChatCompletion(messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>) {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
     
     // Convert messages to Gemini format
     const systemMessage = messages.find(m => m.role === 'system')?.content || '';
@@ -29,7 +29,7 @@ export async function getChatCompletion(messages: Array<{ role: 'user' | 'assist
 
 export async function suggestItemsFromDescription(description: string): Promise<string[]> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
     const prompt = `Based on this description: "${description}", suggest 3-5 specific item names that could be needed. Return only the item names, one per line.`;
     
     const result = await model.generateContent(prompt);
@@ -51,7 +51,7 @@ export async function extractInvoiceData(imageBase64: string): Promise<{
   confidence: number;
 }> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
     
     const prompt = `Analyze this invoice image and extract the following information in JSON format:
     {
@@ -100,7 +100,7 @@ export async function validateInvoiceAgainstPO(invoiceData: any, purchaseOrders:
   anomalies: string[];
 }> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
     
     const prompt = `Analyze this invoice against available purchase orders and detect anomalies:
     
@@ -149,7 +149,7 @@ export async function validateInvoiceAgainstPO(invoiceData: any, purchaseOrders:
 
 export async function querySystemData(question: string, systemData: any): Promise<string> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
     
     const prompt = `You are an ERP system assistant. Answer the user's question based on the provided system data.
     
