@@ -99,15 +99,15 @@ export default function ChatAssistant() {
   }, [sendMessage]);
 
   return (
-    <Card className="w-full max-w-4xl mx-auto h-[70vh] min-h-[500px] flex flex-col">
+    <Card className="w-full max-w-4xl mx-auto h-full flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Bot className="h-5 w-5" />
           AI Assistant
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col">
-        <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2">
+      <CardContent className="flex-1 flex flex-col min-h-0">
+        <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2 min-h-0">
           {messages.map((message) => (
             <div
               key={message.id}
@@ -164,7 +164,7 @@ export default function ChatAssistant() {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="flex gap-2 pt-2 border-t">
+        <div className="flex gap-2 pt-2 border-t flex-shrink-0">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}

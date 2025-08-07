@@ -35,11 +35,11 @@ export default function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 p-6">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Header className="fixed top-0 left-0 right-0 z-50" />
+      <div className="flex flex-1 pt-16">
+        <Sidebar className="fixed left-0 top-16 bottom-0 z-40" />
+        <main className="flex-1 ml-64 p-6 overflow-auto">
           {children}
         </main>
       </div>

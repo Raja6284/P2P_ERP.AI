@@ -26,7 +26,11 @@ const navigation = [
   { name: 'AI Assistant', href: '/ai-assistant', icon: MessageCircle, roles: ['requester', 'manager', 'store', 'finance', 'admin'] },
 ];
 
-export default function Sidebar() {
+interface SidebarProps{
+  className?:string;
+}
+
+export default function Sidebar({className}:SidebarProps) {
   const { data: session } = useSession();
   const pathname = usePathname();
   const userRole = (session?.user as any)?.role;
@@ -36,7 +40,7 @@ export default function Sidebar() {
   );
 
   return (
-    <div className="bg-gray-900 text-white w-64 min-h-screen p-4">
+    <div className={`bg-gray-900 text-white w-64 min-h-screen p-4 overflow-y-auto ${className || ''}`}>
       <nav className="space-y-2">
         {filteredNavigation.map((item) => {
           const isActive = pathname === item.href;

@@ -13,11 +13,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Bell, Settings, LogOut, User } from 'lucide-react';
 
-export default function Header() {
+interface HeaderProps{
+  className?:string;
+}
+
+export default function Header({className}:HeaderProps) {
   const { data: session } = useSession();
 
   return (
-    <header className="bg-white border-b border-gray-200 px-6 py-4">
+    <header className={`bg-white border-b border-gray-200 px-6 py-4 ${className || ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold text-gray-900">ERP System</h1>

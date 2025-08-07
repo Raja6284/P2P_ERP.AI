@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
+import Link from 'next/link'
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,6 +45,11 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <div className="absolute top-4 left-4">
+        <Button asChild variant="outline">
+          <Link href="/">Go to Home</Link>
+        </Button>
+      </div>
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl text-center">Welcome to ERP System</CardTitle>
@@ -94,26 +100,36 @@ export default function LoginPage() {
               </div>
               
               <div className="space-y-2 text-sm">
-                <div className="p-3 bg-blue-50 rounded-lg">
-                  <div className="font-medium">Admin</div>
-                  <div>admin@demo.com / admin123</div>
+                 <div className="p-3 bg-orange-50 rounded-lg">
+                  <div className="font-medium">Requester</div>
+                  <div>raja@gmail.com / raja@123</div>
                 </div>
                 <div className="p-3 bg-green-50 rounded-lg">
                   <div className="font-medium">Manager</div>
-                  <div>manager@demo.com / manager123</div>
+                  <div>rajamanager@gmail.com / raja@123</div>
+                </div>
+                <div className="p-3 bg-orange-50 rounded-lg">
+                  <div className="font-medium">Store</div>
+                  <div>rajastore@gmail.com / raja@123</div>
                 </div>
                 <div className="p-3 bg-purple-50 rounded-lg">
                   <div className="font-medium">Finance</div>
-                  <div>finance@demo.com / finance123</div>
+                  <div>rajafinance@gmail.com / raja@123</div>
                 </div>
-                <div className="p-3 bg-orange-50 rounded-lg">
-                  <div className="font-medium">Requester</div>
-                  <div>requester@demo.com / requester123</div>
+                <div className="p-3 bg-blue-50 rounded-lg">
+                  <div className="font-medium">Admin</div>
+                  <div>rajaadmin@gmail.com / raja@123</div>
                 </div>
               </div>
             </TabsContent>
           </Tabs>
         </CardContent>
+        <div className="p-4 text-center text-sm text-gray-600">
+          Don&apos;t have an account?{' '}
+          <Link href="/auth/register" className="text-blue-600 hover:underline">
+            Register here
+          </Link>
+        </div>
       </Card>
     </div>
   );
