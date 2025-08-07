@@ -26,6 +26,7 @@ interface Requisition {
     totalPrice: number;
   }>;
   createdAt: string;
+  status?:string;
 }
 
 export default function NewPurchaseOrderPage() {
