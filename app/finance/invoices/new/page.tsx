@@ -1,6 +1,5 @@
 'use client';
 
-
 import { useState,useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -16,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Upload, FileText, Loader2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
+// Define the schema for invoice data using Zod
 const invoiceSchema = z.object({
   invoiceNumber: z.string().min(1, 'Invoice number is required'),
   vendorName: z.string().min(1, 'Vendor name is required'),
@@ -27,6 +27,7 @@ const invoiceSchema = z.object({
 });
 
 type InvoiceFormData = z.infer<typeof invoiceSchema>;
+// Define the type for the form data based on the schema
 
 export default function NewInvoicePage() {
   const { data: session } = useSession();
@@ -38,20 +39,24 @@ export default function NewInvoicePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const userRole = (session?.user as any)?.role;
+  // Extract user role from session
 
+  // Initialize react-hook-form with Zod resolver
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<InvoiceFormData>({
     resolver: zodResolver(invoiceSchema),
-  });
+  }); // Associate Zod schema with the form
 
-  if (userRole !== 'finance' && userRole !== 'admin') {
-    router.push('/dashboard');
-    return null;
-  }
-
+  useEffect(() => {
+    if (userRole !== 'finance' && userRole !== 'admin') {
+      router.push('/dashboard');
+    }
+  }, [userRole, router]);
+  
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Check if the file is an image
     if (!file.type.startsWith('image/')) {
       toast.error('Please select an image file');
       return;
@@ -64,6 +69,7 @@ export default function NewInvoicePage() {
       reader.onload = async () => {
         const base64 = (reader.result as string).split(',')[1];
         
+        // Send base64 image data to OCR API
         const response = await fetch('/api/invoices/ocr', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -104,11 +110,13 @@ export default function NewInvoicePage() {
     }
   };
 
+  // Handle form submission
   const onSubmit = async (data: InvoiceFormData) => {
     setIsSubmitting(true);
     try {
       const payload = {
         ...data,
+        // Include OCR data if extracted
         ocrExtracted,
         extractedData,
       };
@@ -120,10 +128,12 @@ export default function NewInvoicePage() {
       });
 
       if (response.ok) {
+        // Redirect on success
         toast.success('Invoice uploaded successfully');
         router.push('/finance/invoices');
       } else {
         const error = await response.json();
+        // Show error message from API
         toast.error(error.message || 'Failed to upload invoice');
       }
     } catch (error) {
@@ -131,6 +141,7 @@ export default function NewInvoicePage() {
     } finally {
       setIsSubmitting(false);
     }
+    // Ensure submitting state is reset
   };
 
   return (
