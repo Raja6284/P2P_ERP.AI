@@ -82,111 +82,112 @@ export default function FinanceInvoicesPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Invoices</h1>
-            <p className="text-gray-600">Manage invoices and process payments</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Invoices</h1>
+            <p className="text-sm sm:text-base text-gray-600">Manage invoices and process payments</p>
           </div>
           <Link href="/finance/invoices/new">
-            <Button>
+            <Button className="text-sm sm:text-base">
               <Upload className="mr-2 h-4 w-4" />
-              Upload Invoice
+              <span className="hidden sm:inline">Upload Invoice</span>
+              <span className="sm:hidden">Upload</span>
             </Button>
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <Card>
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-yellow-600">
+            <CardContent className="pt-4 sm:pt-6">
+              <div className="text-xl sm:text-2xl font-bold text-yellow-600">
                 {invoices.filter(inv => inv.status === 'pending').length}
               </div>
-              <p className="text-sm text-gray-600">Pending</p>
+              <p className="text-xs sm:text-sm text-gray-600">Pending</p>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-blue-600">
+            <CardContent className="pt-4 sm:pt-6">
+              <div className="text-xl sm:text-2xl font-bold text-blue-600">
                 {invoices.filter(inv => inv.status === 'approved').length}
               </div>
-              <p className="text-sm text-gray-600">Approved</p>
+              <p className="text-xs sm:text-sm text-gray-600">Approved</p>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-green-600">
+            <CardContent className="pt-4 sm:pt-6">
+              <div className="text-xl sm:text-2xl font-bold text-green-600">
                 {invoices.filter(inv => inv.status === 'paid').length}
               </div>
-              <p className="text-sm text-gray-600">Paid</p>
+              <p className="text-xs sm:text-sm text-gray-600">Paid</p>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-red-600">
+            <CardContent className="pt-4 sm:pt-6">
+              <div className="text-xl sm:text-2xl font-bold text-red-600">
                 {invoices.filter(inv => isOverdue(inv.dueDate, inv.status)).length}
               </div>
-              <p className="text-sm text-gray-600">Overdue</p>
+              <p className="text-xs sm:text-sm text-gray-600">Overdue</p>
             </CardContent>
           </Card>
         </div>
 
         {invoices.length === 0 ? (
           <Card>
-            <CardContent className="text-center py-12">
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No invoices found</h3>
-              <p className="text-gray-600 mb-4">Upload your first invoice to get started.</p>
+            <CardContent className="text-center py-8 sm:py-12">
+              <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">No invoices found</h3>
+              <p className="text-sm sm:text-base text-gray-600 mb-4">Upload your first invoice to get started.</p>
               <Link href="/finance/invoices/new">
                 <Button>Upload Invoice</Button>
               </Link>
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {invoices.map((invoice) => (
               <Card key={invoice._id}>
-                <CardHeader>
-                  <div className="flex justify-between items-start">
+                <CardHeader className="pb-3 sm:pb-6">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-2 sm:space-y-0">
                     <div>
-                      <CardTitle className="text-lg">{invoice.invoiceNumber}</CardTitle>
-                      <p className="text-sm text-gray-600">
+                      <CardTitle className="text-base sm:text-lg">{invoice.invoiceNumber}</CardTitle>
+                      <p className="text-xs sm:text-sm text-gray-600">
                         Vendor: {invoice.vendorName} • Uploaded by {invoice.uploadedBy}
                       </p>
                       {invoice.poNumber && (
-                        <p className="text-sm text-gray-500">PO: {invoice.poNumber}</p>
+                        <p className="text-xs sm:text-sm text-gray-500">PO: {invoice.poNumber}</p>
                       )}
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 self-start">
                       {invoice.ocrExtracted && (
-                        <Badge variant="outline" className="bg-blue-50 text-blue-700">
+                        <Badge variant="outline" className="bg-blue-50 text-blue-700 text-xs">
                           OCR
                         </Badge>
                       )}
-                      <Badge className={getStatusColor(
+                      <Badge className={`text-xs ${getStatusColor(
                         isOverdue(invoice.dueDate, invoice.status) ? 'overdue' : invoice.status
-                      )}>
+                      )}`}>
                         {isOverdue(invoice.dueDate, invoice.status) ? 'overdue' : invoice.status}
                       </Badge>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <CardContent className="pt-0">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     <div>
-                      <h4 className="font-medium text-gray-900">Amount</h4>
-                      <p className="text-lg font-semibold text-blue-600">
+                      <h4 className="text-sm font-medium text-gray-900">Amount</h4>
+                      <p className="text-base sm:text-lg font-semibold text-blue-600">
                         ${invoice.amount.toFixed(2)}
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-medium text-gray-900">Invoice Date</h4>
-                      <p className="text-sm text-gray-600">
+                      <h4 className="text-sm font-medium text-gray-900">Invoice Date</h4>
+                      <p className="text-xs sm:text-sm text-gray-600">
                         {new Date(invoice.invoiceDate).toLocaleDateString()}
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-medium text-gray-900">Due Date</h4>
-                      <p className={`text-sm ${
+                      <h4 className="text-sm font-medium text-gray-900">Due Date</h4>
+                      <p className={`text-xs sm:text-sm ${
                         isOverdue(invoice.dueDate, invoice.status) 
                           ? 'text-red-600 font-medium' 
                           : 'text-gray-600'
@@ -195,23 +196,23 @@ export default function FinanceInvoicesPage() {
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-medium text-gray-900">Uploaded</h4>
-                      <p className="text-sm text-gray-600">
+                      <h4 className="text-sm font-medium text-gray-900">Uploaded</h4>
+                      <p className="text-xs sm:text-sm text-gray-600">
                         {new Date(invoice.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
 
-                  <div className="mt-4 flex justify-end space-x-2">
+                  <div className="mt-4 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
                     <Link href={`/invoices/${invoice._id}`}>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto text-xs sm:text-sm">
                       <Eye className="mr-2 h-4 w-4" />
                       View Details
                       </Button>
                     </Link>
                     {invoice.status === 'approved' && (
                       <Link href={`/finance/payments/new?invoiceId=${invoice._id}`}>
-                        <Button size="sm">Record Payment</Button>
+                        <Button size="sm" className="w-full sm:w-auto text-xs sm:text-sm">Record Payment</Button>
                       </Link>
                     )}
                   </div>

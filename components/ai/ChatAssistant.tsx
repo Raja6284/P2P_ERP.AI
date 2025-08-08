@@ -99,15 +99,15 @@ export default function ChatAssistant() {
   }, [sendMessage]);
 
   return (
-    <Card className="w-full max-w-4xl mx-auto h-full flex flex-col">
+    <Card className="w-full max-w-4xl mx-auto h-full flex flex-col min-h-0">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
           <Bot className="h-5 w-5" />
           AI Assistant
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col min-h-0">
-        <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2 min-h-0">
+        <div className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-4 pr-1 sm:pr-2 min-h-0">
           {messages.map((message) => (
             <div
               key={message.id}
@@ -116,7 +116,7 @@ export default function ChatAssistant() {
               }`}
             >
               {message.role === 'assistant' && (
-                <Avatar className="h-8 w-8 flex-shrink-0">
+                <Avatar className="h-7 w-7 sm:h-8 sm:w-8 flex-shrink-0">
                   <AvatarFallback className="bg-blue-100 text-blue-600">
                     {message.id === 'typing' ? (
                       <div className="flex space-x-1">
@@ -125,13 +125,13 @@ export default function ChatAssistant() {
                         <div className="w-1 h-1 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       </div>
                     ) : (
-                      <Bot className="h-4 w-4" />
+                      <Bot className="h-3 w-3 sm:h-4 sm:w-4" />
                     )}
                   </AvatarFallback>
                 </Avatar>
               )}
               <div
-                className={`max-w-[85%] p-3 rounded-lg break-words ${
+                className={`max-w-[85%] sm:max-w-[80%] p-2 sm:p-3 rounded-lg break-words ${
                   message.role === 'user'
                     ? 'bg-blue-600 text-white'
                     : message.id === 'typing' 
@@ -141,21 +141,21 @@ export default function ChatAssistant() {
               >
                 {message.id === 'typing' ? (
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm">AI is thinking</span>
+                    <span className="text-xs sm:text-sm">AI is thinking</span>
                   </div>
                 ) : (
                   <>
-                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
-                    <p className="text-xs mt-2 opacity-70">
+                    <p className="text-xs sm:text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                    <p className="text-xs mt-1 sm:mt-2 opacity-70">
                       {message.timestamp.toLocaleTimeString()}
                     </p>
                   </>
                 )}
               </div>
               {message.role === 'user' && (
-                <Avatar className="h-8 w-8">
+                <Avatar className="h-7 w-7 sm:h-8 sm:w-8 flex-shrink-0">
                   <AvatarFallback className="bg-gray-100 text-gray-600">
-                    <User className="h-4 w-4" />
+                    <User className="h-3 w-3 sm:h-4 sm:w-4" />
                   </AvatarFallback>
                 </Avatar>
               )}
@@ -169,15 +169,20 @@ export default function ChatAssistant() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask me anything about the ERP system... (Press Enter to send)"
+            placeholder="Ask me anything about the ERP system..."
             disabled={isLoading}
-            className="flex-1 resize-none"
+            className="flex-1 resize-none text-sm sm:text-base"
           />
-          <Button onClick={sendMessage} disabled={isLoading || !input.trim()}>
+          <Button 
+            onClick={sendMessage} 
+            disabled={isLoading || !input.trim()}
+            size="sm"
+            className="px-3 sm:px-4"
+          >
             {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
             ) : (
-              <Send className="h-4 w-4" />
+              <Send className="h-3 w-3 sm:h-4 sm:w-4" />
             )}
           </Button>
         </div>

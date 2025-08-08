@@ -36,8 +36,8 @@ export default function DashboardPage() {
   };
 
   const renderRequesterDashboard = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <StatsCard
           title="Total Requisitions"
           value={stats.totalRequisitions || 0}
@@ -60,35 +60,35 @@ export default function DashboardPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Quick Actions</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-2 sm:space-y-3">
             <a
               href="/requisitions/new"
-              className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="block p-2 sm:p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <div className="font-medium">Create New Requisition</div>
-              <div className="text-sm text-gray-600">Start a new purchase request</div>
+              <div className="text-sm sm:text-base font-medium">Create New Requisition</div>
+              <div className="text-xs sm:text-sm text-gray-600">Start a new purchase request</div>
             </a>
             <a
               href="/requisitions"
-              className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="block p-2 sm:p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <div className="font-medium">View My Requisitions</div>
-              <div className="text-sm text-gray-600">Check status of your requests</div>
+              <div className="text-sm sm:text-base font-medium">View My Requisitions</div>
+              <div className="text-xs sm:text-sm text-gray-600">Check status of your requests</div>
             </a>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Recent Activity</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-sm text-gray-600">
+            <div className="text-xs sm:text-sm text-gray-600">
               No recent activity to display.
             </div>
           </CardContent>
@@ -98,8 +98,8 @@ export default function DashboardPage() {
   );
 
   const renderManagerDashboard = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <StatsCard
           title="Pending Approvals"
           value={stats.pendingApprovals || 0}
@@ -122,35 +122,35 @@ export default function DashboardPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Quick Actions</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-2 sm:space-y-3">
             <a
               href="/requisitions"
-              className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="block p-2 sm:p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <div className="font-medium">Review Requisitions</div>
-              <div className="text-sm text-gray-600">Approve or reject pending requests</div>
+              <div className="text-sm sm:text-base font-medium">Review Requisitions</div>
+              <div className="text-xs sm:text-sm text-gray-600">Approve or reject pending requests</div>
             </a>
             <a
               href="/purchase-orders/new"
-              className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="block p-2 sm:p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <div className="font-medium">Create Purchase Order</div>
-              <div className="text-sm text-gray-600">Convert approved requisitions to POs</div>
+              <div className="text-sm sm:text-base font-medium">Create Purchase Order</div>
+              <div className="text-xs sm:text-sm text-gray-600">Convert approved requisitions to POs</div>
             </a>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Approval Queue</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Approval Queue</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-sm text-gray-600">
+            <div className="text-xs sm:text-sm text-gray-600">
               {stats.pendingApprovals ? 
                 `${stats.pendingApprovals} requisitions awaiting your approval` :
                 'No pending approvals'
@@ -163,8 +163,8 @@ export default function DashboardPage() {
   );
 
   const renderFinanceDashboard = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <StatsCard
           title="Pending Invoices"
           value={stats.pendingInvoices || 0}
@@ -187,35 +187,35 @@ export default function DashboardPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Quick Actions</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-2 sm:space-y-3">
             <a
               href="/invoices/new"
-              className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="block p-2 sm:p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <div className="font-medium">Upload Invoice</div>
-              <div className="text-sm text-gray-600">Add new invoice with OCR support</div>
+              <div className="text-sm sm:text-base font-medium">Upload Invoice</div>
+              <div className="text-xs sm:text-sm text-gray-600">Add new invoice with OCR support</div>
             </a>
             <a
               href="/payments/new"
-              className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="block p-2 sm:p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <div className="font-medium">Record Payment</div>
-              <div className="text-sm text-gray-600">Process invoice payments</div>
+              <div className="text-sm sm:text-base font-medium">Record Payment</div>
+              <div className="text-xs sm:text-sm text-gray-600">Process invoice payments</div>
             </a>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Payment Summary</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Payment Summary</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-xs sm:text-sm">
               <div className="flex justify-between">
                 <span>Pending Invoices:</span>
                 <span className="font-medium">{stats.pendingInvoices || 0}</span>
@@ -232,8 +232,8 @@ export default function DashboardPage() {
   );
 
   const renderAdminDashboard = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <StatsCard
           title="Total Requisitions"
           value={stats.totalRequisitions || 0}
@@ -256,13 +256,13 @@ export default function DashboardPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>System Overview</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">System Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-xs sm:text-sm">
               <div className="flex justify-between">
                 <span>Active Users:</span>
                 <span className="font-medium">15</span>
@@ -279,15 +279,15 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Quick Actions</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-2 sm:space-y-3">
             <a
               href="/users"
-              className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="block p-2 sm:p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <div className="font-medium">Manage Users</div>
-              <div className="text-sm text-gray-600">Add or modify user accounts</div>
+              <div className="text-sm sm:text-base font-medium">Manage Users</div>
+              <div className="text-xs sm:text-sm text-gray-600">Add or modify user accounts</div>
             </a>
           </CardContent>
         </Card>
@@ -298,10 +298,10 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <Layout>
-        <div className="animate-pulse space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="animate-pulse space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-24 bg-gray-200 rounded-lg"></div>
+              <div key={i} className="h-20 sm:h-24 bg-gray-200 rounded-lg"></div>
             ))}
           </div>
         </div>
@@ -311,12 +311,12 @@ export default function DashboardPage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Welcome back, {session?.user?.name}!
           </h1>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             Here's what's happening in your ERP system today.
           </p>
         </div>

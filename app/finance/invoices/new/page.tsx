@@ -146,22 +146,22 @@ export default function NewInvoicePage() {
 
   return (
     <Layout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Upload Invoice</h1>
-          <p className="text-gray-600">Upload a new invoice with AI-powered OCR data extraction</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Upload Invoice</h1>
+          <p className="text-sm sm:text-base text-gray-600">Upload a new invoice with AI-powered OCR data extraction</p>
         </div>
 
         <Card className="w-full max-w-2xl mx-auto">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
               <Upload className="h-5 w-5" />
               Invoice Upload with OCR
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4 sm:space-y-6">
             <div className="mb-6">
-              <Label>Upload Invoice Image (AI OCR)</Label>
+              <Label className="text-sm sm:text-base">Upload Invoice Image (AI OCR)</Label>
               <div className="mt-2">
                 <input
                   ref={fileInputRef}
@@ -175,7 +175,7 @@ export default function NewInvoicePage() {
                   variant="outline"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isProcessingOCR}
-                  className="w-full"
+                  className="w-full text-sm sm:text-base py-2 sm:py-3"
                 >
                   {isProcessingOCR ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -186,10 +186,10 @@ export default function NewInvoicePage() {
                 </Button>
               </div>
               {ocrExtracted && (
-                <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                <div className="mt-2 p-2 sm:p-3 bg-blue-50 border border-blue-200 rounded-md">
                   <div className="flex items-center">
                     <FileText className="h-4 w-4 text-blue-600 mr-2" />
-                    <span className="text-sm text-blue-800">
+                    <span className="text-xs sm:text-sm text-blue-800">
                       Data extracted with {extractedData?.confidence}% confidence using Gemini AI. Please verify all fields.
                     </span>
                   </div>
@@ -197,14 +197,15 @@ export default function NewInvoicePage() {
               )}
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="invoiceNumber">Invoice Number</Label>
+                  <Label htmlFor="invoiceNumber" className="text-sm sm:text-base">Invoice Number</Label>
                   <Input
                     id="invoiceNumber"
                     {...register('invoiceNumber')}
                     placeholder="Enter invoice number"
+                    className="text-sm sm:text-base"
                   />
                   {errors.invoiceNumber && (
                     <p className="text-sm text-red-600 mt-1">{errors.invoiceNumber.message}</p>
@@ -212,11 +213,12 @@ export default function NewInvoicePage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="vendorName">Vendor Name</Label>
+                  <Label htmlFor="vendorName" className="text-sm sm:text-base">Vendor Name</Label>
                   <Input
                     id="vendorName"
                     {...register('vendorName')}
                     placeholder="Enter vendor name"
+                    className="text-sm sm:text-base"
                   />
                   {errors.vendorName && (
                     <p className="text-sm text-red-600 mt-1">{errors.vendorName.message}</p>
@@ -224,7 +226,7 @@ export default function NewInvoicePage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="amount">Amount ($)</Label>
+                  <Label htmlFor="amount" className="text-sm sm:text-base">Amount ($)</Label>
                   <Input
                     id="amount"
                     type="number"
@@ -232,6 +234,7 @@ export default function NewInvoicePage() {
                     min="0.01"
                     {...register('amount', { valueAsNumber: true })}
                     placeholder="Enter amount"
+                    className="text-sm sm:text-base"
                   />
                   {errors.amount && (
                     <p className="text-sm text-red-600 mt-1">{errors.amount.message}</p>
@@ -239,20 +242,22 @@ export default function NewInvoicePage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="poNumber">PO Number (Optional)</Label>
+                  <Label htmlFor="poNumber" className="text-sm sm:text-base">PO Number (Optional)</Label>
                   <Input
                     id="poNumber"
                     {...register('poNumber')}
                     placeholder="Enter PO number"
+                    className="text-sm sm:text-base"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="invoiceDate">Invoice Date</Label>
+                  <Label htmlFor="invoiceDate" className="text-sm sm:text-base">Invoice Date</Label>
                   <Input
                     id="invoiceDate"
                     type="date"
                     {...register('invoiceDate')}
+                    className="text-sm sm:text-base"
                   />
                   {errors.invoiceDate && (
                     <p className="text-sm text-red-600 mt-1">{errors.invoiceDate.message}</p>
@@ -260,11 +265,12 @@ export default function NewInvoicePage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="dueDate">Due Date</Label>
+                  <Label htmlFor="dueDate" className="text-sm sm:text-base">Due Date</Label>
                   <Input
                     id="dueDate"
                     type="date"
                     {...register('dueDate')}
+                    className="text-sm sm:text-base"
                   />
                   {errors.dueDate && (
                     <p className="text-sm text-red-600 mt-1">{errors.dueDate.message}</p>
@@ -273,24 +279,26 @@ export default function NewInvoicePage() {
               </div>
 
               <div>
-                <Label htmlFor="notes">Notes (Optional)</Label>
+                <Label htmlFor="notes" className="text-sm sm:text-base">Notes (Optional)</Label>
                 <Textarea
                   id="notes"
                   {...register('notes')}
                   placeholder="Enter any additional notes"
                   rows={3}
+                  className="text-sm sm:text-base"
                 />
               </div>
 
-              <div className="flex justify-end space-x-4">
+              <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => router.push('/finance/invoices')}
+                  className="w-full sm:w-auto"
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
                   {isSubmitting ? 'Uploading...' : 'Upload Invoice'}
                 </Button>
               </div>

@@ -12,8 +12,10 @@ import {
   CreditCard,
   Users,
   Settings,
-  MessageCircle
+  MessageCircle,
+  X
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, roles: ['requester', 'manager', 'store', 'finance', 'admin'] },
@@ -26,11 +28,13 @@ const navigation = [
   { name: 'AI Assistant', href: '/ai-assistant', icon: MessageCircle, roles: ['requester', 'manager', 'store', 'finance', 'admin'] },
 ];
 
-interface SidebarProps{
+interface SidebarProps {
   className?:string;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export default function Sidebar({className}:SidebarProps) {
+export default function Sidebar({ className, isOpen = true, onClose }: SidebarProps) {
   const { data: session } = useSession();
   const pathname = usePathname();
   const userRole = (session?.user as any)?.role;
@@ -40,7 +44,35 @@ export default function Sidebar({className}:SidebarProps) {
   );
 
   return (
-    <div className={`bg-gray-900 text-white w-64 min-h-screen p-4 overflow-y-auto ${className || ''}`}>
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={cn(
+        "bg-gray-900 text-white w-64 min-h-screen p-4 overflow-y-auto transition-transform duration-300 ease-in-out z-50",
+        "fixed lg:static lg:translate-x-0",
+        isOpen ? "translate-x-0" : "-translate-x-full",
+        className
+      )}>
+        {/* Mobile close button */}
+        <div className="flex justify-between items-center mb-4 lg:hidden">
+          <h2 className="text-lg font-semibold">Menu</h2>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="text-white hover:bg-gray-800"
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+        
       <nav className="space-y-2">
         {filteredNavigation.map((item) => {
           const isActive = pathname === item.href;
@@ -48,19 +80,21 @@ export default function Sidebar({className}:SidebarProps) {
             <Link
               key={item.name}
               href={item.href}
+                onClick={onClose}
               className={cn(
-                'flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors',
+                  'flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors',
                 isActive
                   ? 'bg-gray-800 text-white'
                   : 'text-gray-300 hover:bg-gray-800 hover:text-white'
               )}
             >
-              <item.icon className="mr-3 h-5 w-5" />
-              {item.name}
+                <item.icon className="mr-3 h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+                <span className="truncate">{item.name}</span>
             </Link>
           );
         })}
       </nav>
-    </div>
+      </div>
+    </>
   );
 }

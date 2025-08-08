@@ -44,20 +44,20 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
             <div className="absolute top-4 left-4">
         <Button asChild variant="outline">
           <Link href="/">Go to Home</Link>
         </Button>
       </div>
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-sm sm:max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl text-center">Welcome to ERP System</CardTitle>
-          <CardDescription className="text-center">
+          <CardTitle className="text-xl sm:text-2xl text-center">Welcome to ERP System</CardTitle>
+          <CardDescription className="text-center text-sm sm:text-base">
             Sign in to your account to continue
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-4 sm:p-6">
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="login">Login</TabsTrigger>
@@ -65,9 +65,9 @@ export default function LoginPage() {
             </TabsList>
             
             <TabsContent value="login">
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-3 sm:space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email" className="text-sm sm:text-base">Email</Label>
                   <Input
                     id="email"
                     name="email"
@@ -75,10 +75,11 @@ export default function LoginPage() {
                     autoComplete="email"
                     required
                     placeholder="Enter your email"
+                    className="text-sm sm:text-base"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password" className="text-sm sm:text-base">Password</Label>
                   <Input
                     id="password"
                     name="password"
@@ -86,45 +87,46 @@ export default function LoginPage() {
                     autoComplete="current-password"
                     required
                     placeholder="Enter your password"
+                    className="text-sm sm:text-base"
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full text-sm sm:text-base" disabled={isLoading}>
                   {isLoading ? 'Signing in...' : 'Sign in'}
                 </Button>
               </form>
             </TabsContent>
 
-            <TabsContent value="demo" className="space-y-4">
-              <div className="text-sm text-gray-600 mb-4">
+            <TabsContent value="demo" className="space-y-3 sm:space-y-4">
+              <div className="text-xs sm:text-sm text-gray-600 mb-4">
                 Use these demo accounts to explore different user roles:
               </div>
               
-              <div className="space-y-2 text-sm">
-                 <div className="p-3 bg-orange-50 rounded-lg">
-                  <div className="font-medium">Requester</div>
-                  <div>raja@gmail.com / raja@123</div>
+              <div className="space-y-2 text-xs sm:text-sm">
+                 <div className="p-2 sm:p-3 bg-orange-50 rounded-lg">
+                  <div className="font-medium text-sm">Requester</div>
+                  <div className="text-xs sm:text-sm">raja@gmail.com / raja@123</div>
                 </div>
-                <div className="p-3 bg-green-50 rounded-lg">
-                  <div className="font-medium">Manager</div>
-                  <div>rajamanager@gmail.com / raja@123</div>
+                <div className="p-2 sm:p-3 bg-green-50 rounded-lg">
+                  <div className="font-medium text-sm">Manager</div>
+                  <div className="text-xs sm:text-sm">rajamanager@gmail.com / raja@123</div>
                 </div>
-                <div className="p-3 bg-orange-50 rounded-lg">
-                  <div className="font-medium">Store</div>
-                  <div>rajastore@gmail.com / raja@123</div>
+                <div className="p-2 sm:p-3 bg-orange-50 rounded-lg">
+                  <div className="font-medium text-sm">Store</div>
+                  <div className="text-xs sm:text-sm">rajastore@gmail.com / raja@123</div>
                 </div>
-                <div className="p-3 bg-purple-50 rounded-lg">
-                  <div className="font-medium">Finance</div>
-                  <div>rajafinance@gmail.com / raja@123</div>
+                <div className="p-2 sm:p-3 bg-purple-50 rounded-lg">
+                  <div className="font-medium text-sm">Finance</div>
+                  <div className="text-xs sm:text-sm">rajafinance@gmail.com / raja@123</div>
                 </div>
-                <div className="p-3 bg-blue-50 rounded-lg">
-                  <div className="font-medium">Admin</div>
-                  <div>rajaadmin@gmail.com / raja@123</div>
+                <div className="p-2 sm:p-3 bg-blue-50 rounded-lg">
+                  <div className="font-medium text-sm">Admin</div>
+                  <div className="text-xs sm:text-sm">rajaadmin@gmail.com / raja@123</div>
                 </div>
               </div>
             </TabsContent>
           </Tabs>
         </CardContent>
-        <div className="p-4 text-center text-sm text-gray-600">
+        <div className="p-3 sm:p-4 text-center text-xs sm:text-sm text-gray-600">
           Don&apos;t have an account?{' '}
           <Link href="/auth/register" className="text-blue-600 hover:underline">
             Register here
